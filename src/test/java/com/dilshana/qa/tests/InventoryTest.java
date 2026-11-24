@@ -11,7 +11,6 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import io.qameta.allure.SeverityLevel;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import org.testng.annotations.Test;
@@ -75,8 +74,6 @@ public class InventoryTest extends BaseTest {
     public void cartContainsAddedProducts() {
         CartPage cart = loggedIn().addToCart(BACKPACK).addToCart(BIKE_LIGHT).openCart();
 
-        List<String> names = cart.itemNames();
-        Collections.sort(names);
-        assertThat(names).containsExactly(BACKPACK, BIKE_LIGHT);
+        assertThat(cart.itemNames()).containsExactlyInAnyOrder(BACKPACK, BIKE_LIGHT);
     }
 }
