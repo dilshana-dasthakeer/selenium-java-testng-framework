@@ -36,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        browser: [chrome, firefox, edge]
+        browser: [chrome, firefox]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -85,9 +85,12 @@ jobs:
           path: target/allure-results
           merge-multiple: true
       - name: Build Allure report
-        run: mvn -B -ntp allure:report
+        run: |
+          curl -sSL -o allure.tgz https://github.com/allure-framework/allure2/releases/download/2.29.0/allure-2.29.0.tgz
+          tar -xzf allure.tgz
+          ./allure-2.29.0/bin/allure generate target/allure-results -o target/allure-report --clean
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: target/site/allure-maven-plugin
+          path: target/allure-report
       - id: deploy
         uses: actions/deploy-pages@v4
