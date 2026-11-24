@@ -50,8 +50,9 @@ public abstract class BasePage {
         }
     }
 
-    protected boolean isAbsent(By locator) {
-        return wait.until(ExpectedConditions.numberOfElementsToBe(locator, 0));
+    /** Waits until no element matches the locator. Throws a TimeoutException if one stays. */
+    protected void waitUntilAbsent(By locator) {
+        wait.until(ExpectedConditions.numberOfElementsToBe(locator, 0));
     }
 
     public String currentUrl() {
