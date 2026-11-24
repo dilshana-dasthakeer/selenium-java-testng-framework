@@ -1,0 +1,23 @@
+[
+  {
+    "description": "missing first name",
+    "firstName": "",
+    "lastName": "Dasthakeer",
+    "postalCode": "20000",
+    "expectedError": "Error: First Name is required"
+  },
+  {
+    "description": "missing last name",
+    "firstName": "Dilshana",
+    "lastName": "",
+    "postalCode": "20000",
+    "expectedError": "Error: Last Name is required"
+  },
+  {
+    "description": "missing postal code",
+    "firstName": "Dilshana",
+    "lastName": "Dasthakeer",
+    "postalCode": "",
+    "expectedError": "Error: Postal Code is required"
+  }
+]

@@ -1,0 +1,17 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Smoke" parallel="methods" thread-count="3" data-provider-thread-count="3">
+  <listeners>
+    <listener class-name="com.dilshana.qa.listeners.TestListener"/>
+    <listener class-name="com.dilshana.qa.listeners.AnnotationTransformer"/>
+  </listeners>
+  <test name="Smoke">
+    <groups>
+      <run>
+        <include name="smoke"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="com.dilshana.qa.tests"/>
+    </packages>
+  </test>
+</suite>
