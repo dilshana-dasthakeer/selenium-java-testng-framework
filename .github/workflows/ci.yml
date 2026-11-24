@@ -1,0 +1,93 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 20 * * *" # nightly, 02:00 Sri Lanka time
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: Smoke (Chrome)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Run smoke suite
+        run: mvn -B -ntp test -Denv=ci -Dsuite=smoke -Dbrowser=chrome
+
+  regression:
+    name: Regression (${{ matrix.browser }})
+    needs: smoke
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, firefox, edge]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - name: Run regression suite
+        run: mvn -B -ntp test -Denv=ci -Dsuite=regression -Dbrowser=${{ matrix.browser }}
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ matrix.browser }}
+          path: target/allure-results
+          if-no-files-found: ignore
+      - name: Upload TestNG reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports-${{ matrix.browser }}
+          path: target/surefire-reports
+          if-no-files-found: ignore
+
+  report:
+    name: Publish Allure report
+    needs: regression
+    if: always() && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: allure-results-*
+          path: target/allure-results
+          merge-multiple: true
+      - name: Build Allure report
+        run: mvn -B -ntp allure:report
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: target/site/allure-maven-plugin
+      - id: deploy
+        uses: actions/deploy-pages@v4
