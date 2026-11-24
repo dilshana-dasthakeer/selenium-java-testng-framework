@@ -6,7 +6,9 @@
 ![TestNG](https://img.shields.io/badge/TestNG-7.11-red)
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue)
 
-A UI test automation framework in Java, built the way I structure automation on enterprise projects: small page objects, tests that read like requirements, configuration outside the code, and a pipeline that runs everything in three browsers.
+A UI test automation framework in Java, built the way I structure automation on enterprise projects: small page objects, tests that read like requirements, configuration outside the code, and a pipeline that runs everything in Chrome and Firefox.
+
+**[View the latest Allure report](https://dilshana-dasthakeer.github.io/selenium-java-testng-framework/)**, published from CI on every push to main.
 
 It tests two public practice sites, [Sauce Demo](https://www.saucedemo.com) (login, products, cart, checkout) and [The Internet](https://the-internet.herokuapp.com) (dropdowns, dynamic loading, web tables).
 
@@ -24,7 +26,7 @@ It tests two public practice sites, [Sauce Demo](https://www.saucedemo.com) (log
 | **Flaky tests** | A retry analyzer applied to every test. Retries are logged so flakiness stays visible. |
 | **Reporting** | Allure report with steps, severity, and a screenshot and URL attached to every failure. |
 | **Suites** | `smoke` runs the critical paths. `regression` runs everything. |
-| **CI** | GitHub Actions: smoke gate, then regression in a Chrome, Firefox and Edge matrix, then the Allure report published to GitHub Pages. Runs on every push, pull request and nightly. |
+| **CI** | GitHub Actions: smoke gate, then regression in a Chrome and Firefox matrix, then the Allure report published to GitHub Pages. Runs on every push, pull request and nightly. |
 | **Modern Selenium** | Selenium 4 with Selenium Manager, so no WebDriverManager dependency. |
 
 ## Tech stack
