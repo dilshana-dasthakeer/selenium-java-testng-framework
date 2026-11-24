@@ -8,8 +8,10 @@ import org.testng.annotations.ITestAnnotation;
 /** Applies the retry analyzer to every test, so no test needs its own annotation. */
 public class AnnotationTransformer implements IAnnotationTransformer {
 
+    /** TestNG declares this signature with raw types, so the override has to as well. */
     @Override
-    public void transform(ITestAnnotation annotation, Class<?> testClass, Constructor<?> testConstructor,
+    @SuppressWarnings("rawtypes")
+    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor,
                           Method testMethod) {
         annotation.setRetryAnalyzer(RetryAnalyzer.class);
     }
